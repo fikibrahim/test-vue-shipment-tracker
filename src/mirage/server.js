@@ -1,14 +1,14 @@
-import { createServer, Response } from "miragejs"
+import { createServer, Response } from "miragejs";
 
 export function makeServer({ environment = "development" } = {}) {
-  console.log("Mirage server started")
+  console.log("Mirage server started");
 
   return createServer({
     environment,
     routes() {
-      this.namespace = "api"
+      this.namespace = "api";
 
-     let shipments = [
+      let shipments = [
         {
           id: 1,
           origin: "Jakarta",
@@ -16,7 +16,7 @@ export function makeServer({ environment = "development" } = {}) {
           status: "Not Assigned",
           vehicle: "Truck",
           route: "Via Toll",
-          transporter: null
+          transporter: null,
         },
         {
           id: 2,
@@ -25,7 +25,7 @@ export function makeServer({ environment = "development" } = {}) {
           status: "Assigned",
           vehicle: "Van",
           route: "Via Ferry",
-          transporter: "PT. Kirim Cepat"
+          transporter: "PT. Kirim Cepat",
         },
         {
           id: 3,
@@ -34,7 +34,7 @@ export function makeServer({ environment = "development" } = {}) {
           status: "Not Assigned",
           vehicle: "Truck",
           route: "Lintas Sumatera",
-          transporter: null
+          transporter: null,
         },
         {
           id: 4,
@@ -43,7 +43,7 @@ export function makeServer({ environment = "development" } = {}) {
           status: "Assigned",
           vehicle: "Pickup",
           route: "Via Jalan Nasional",
-          transporter: "PT. Angkut Aman"
+          transporter: "PT. Angkut Aman",
         },
         {
           id: 5,
@@ -52,7 +52,7 @@ export function makeServer({ environment = "development" } = {}) {
           status: "Not Assigned",
           vehicle: "Truck",
           route: "Via Laut",
-          transporter: null
+          transporter: null,
         },
         {
           id: 6,
@@ -61,7 +61,7 @@ export function makeServer({ environment = "development" } = {}) {
           status: "Assigned",
           vehicle: "Van",
           route: "Trans Sumatera",
-          transporter: "PT. Logistik Hebat"
+          transporter: "PT. Logistik Hebat",
         },
         {
           id: 7,
@@ -70,7 +70,7 @@ export function makeServer({ environment = "development" } = {}) {
           status: "Not Assigned",
           vehicle: "Truck",
           route: "Via Jalan Kalimantan",
-          transporter: null
+          transporter: null,
         },
         {
           id: 8,
@@ -79,7 +79,7 @@ export function makeServer({ environment = "development" } = {}) {
           status: "Assigned",
           vehicle: "Truck",
           route: "Via Jalan Kalimantan",
-          transporter: "PT. Kirim Cepat"
+          transporter: "PT. Kirim Cepat",
         },
         {
           id: 9,
@@ -88,7 +88,7 @@ export function makeServer({ environment = "development" } = {}) {
           status: "Not Assigned",
           vehicle: "Pickup",
           route: "Via Jalur NTT",
-          transporter: null
+          transporter: null,
         },
         {
           id: 10,
@@ -97,24 +97,34 @@ export function makeServer({ environment = "development" } = {}) {
           status: "Assigned",
           vehicle: "Truck",
           route: "Via Papua Route",
-          transporter: "PT. Logistik Hebat"
-        }
-      ]
+          transporter: "PT. Logistik Hebat",
+        },
+      ];
 
-      this.get("/shipments", () => shipments)
+      this.get("/shipments", () => shipments);
+
+      this.get("/transporters", () => {
+        return [
+          "PT. Kirim Cepat",
+          "PT. Angkut Aman",
+          "PT. Logistik Hebat",
+          "PT. Ekspedisi Nusantara",
+          "PT. Cargo Sejahtera",
+        ];
+      });
 
       this.post("/shipments/:id/assign", (schema, request) => {
-        const id = parseInt(request.params.id)
-        const { transporter } = JSON.parse(request.requestBody)
-        const shipment = shipments.find(s => s.id === id)
+        const id = parseInt(request.params.id);
+        const { transporter } = JSON.parse(request.requestBody);
+        const shipment = shipments.find((s) => s.id === id);
         if (shipment) {
-          shipment.transporter = transporter
-          shipment.status = "Assigned"
-          return { success: true }
+          shipment.transporter = transporter;
+          shipment.status = "Assigned";
+          return { success: true };
         } else {
-          return new Response(404, {}, { error: "Not found" })
+          return new Response(404, {}, { error: "Not found" });
         }
-      })
-    }
-  })
+      });
+    },
+  });
 }
